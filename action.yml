@@ -34,7 +34,7 @@ runs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Created By:* `${{inputs.actor}}`"
+                  "text": "*Created By:* `${{inputs.author}}`"
                 }
               },
               {
