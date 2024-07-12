@@ -1,0 +1,47 @@
+name: 'Slack Notify on failure'
+description: Notifies slack on job failure in main.
+inputs:
+  slack-notify-token:
+    description: Slack Notify application token
+    required: true
+  channel-id:
+    description: Slack channel ID you want to send the message to
+    required: true
+  author:
+    description: Author of the workflow
+    required: true
+  payload:
+    description: For posting a rich message using Block Kit
+    required: false
+    default: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Author:*\n `${{inputs.author}}`"
+                  }
+                ]
+              }
+            ]
+          }
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Slack Notify
+      uses: slackapi/slack-github-action@v1.25.0
+      env:
+        SLACK_BOT_TOKEN: ${{ inputs.slack-notify-token }}
+      with:
+        # Slack channel id, channel name, or user id to post message.
+        # See also: https://api.slack.com/methods/chat.postMessage#channels
+        channel-id: ${{ inputs.channel-id }}
+        # For posting a rich message using Block Kit
+        payload: ${{ inputs.payload }}
