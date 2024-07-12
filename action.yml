@@ -10,24 +10,7 @@ inputs:
   author:
     description: Author of the workflow
     required: true
-  payload:
-    description: For posting a rich message using Block Kit
-    required: false
-    default: |
-          {
-            "blocks": [
-              {
-                "type": "section",
-                "fields": [
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Author:*\n `${{inputs.author}}`"
-                  }
-                ]
-              }
-            ]
-          }
-
+    
 runs:
   using: composite
   steps:
@@ -44,4 +27,29 @@ runs:
         # See also: https://api.slack.com/methods/chat.postMessage#channels
         channel-id: ${{ inputs.channel-id }}
         # For posting a rich message using Block Kit
-        payload: ${{ inputs.payload }}
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Created By:* `${{inputs.actor}}`"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Team:* Discover"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Jira Ref:* <https://jira.example.com/browse/TICKET_ID|Jira Ticket>"
+                }
+              }
+            ]
+          }
